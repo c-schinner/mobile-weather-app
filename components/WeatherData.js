@@ -1,7 +1,7 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useState, useEffect } from "react";
-import { fetchWeatherData } from "./services/GetWeather";
+import { fetchWeatherData, iconUrlFromCode } from "./services/GetWeather";
 
 export default function WeatherData({ searchParams }) {
     const [weather, setWeather] = useState(null);
@@ -18,6 +18,32 @@ export default function WeatherData({ searchParams }) {
         fetchWeather();
     }, [searchParams]);
 
+    const weatherInfoMap = weather
+        ? [
+              {
+                  label: "Temperature",
+                  value: `${weather.main?.temp} °F`,
+                  icon: "thermometer",
+              },
+              {
+                  label: "Humidity",
+                  value: `${weather.main?.humidity}%`,
+                  icon: "water-percent",
+              },
+              {
+                  label: "Wind Speed",
+                  value: `${weather.wind?.speed} mph`,
+                  icon: "weather-windy",
+              },
+              {
+                  label: "Description",
+                  value: weather.weather[0]?.description,
+                  icon: iconUrlFromCode(weather.weather[0]?.icon),
+                  isImage: true,
+              },
+          ]
+        : [];
+
     return (
         <View>
             {weather ? (
@@ -29,43 +55,26 @@ export default function WeatherData({ searchParams }) {
                             </Text>
                         </View>
                     </View>
+
                     <View style={styles.weatherDataContainer}>
-                        <View style={styles.weatherData}>
-                            <Text style={styles.weatherInfo}>
-                                Temp: {weather.main?.temp} °F
-                            </Text>
-                            <MaterialCommunityIcons
-                                name="thermometer"
-                                size={25}
-                            />
-                        </View>
-                        <View style={styles.weatherData}>
-                            <Text style={styles.weatherInfo}>
-                                Humidity: {weather.main?.humidity}
-                            </Text>
-                            <MaterialCommunityIcons
-                                name="water-percent"
-                                size={25}
-                            />
-                        </View>
-                        <View style={styles.weatherData}>
-                            <Text style={styles.weatherInfo}>
-                                Wind Speed: {weather.wind?.speed}
-                            </Text>
-                            <MaterialCommunityIcons
-                                name="weather-windy"
-                                size={25}
-                            />
-                        </View>
-                        <View style={styles.weatherData}>
-                            <Text style={styles.weatherInfo}>
-                                Weather: {weather.weather[0]?.description}
-                            </Text>
-                            <MaterialCommunityIcons
-                                name="weather-sunny"
-                                size={25}
-                            />
-                        </View>
+                        {weatherInfoMap.map((info, index) => (
+                            <View key={index} style={styles.weatherData}>
+                                <Text style={styles.weatherInfo}>
+                                    {info.label}: {info.value}
+                                </Text>
+                                {info.isImage ? (
+                                    <Image
+                                        style={styles.weatherIcon}
+                                        source={{ uri: info.icon }}
+                                    />
+                                ) : (
+                                    <MaterialCommunityIcons
+                                        name={info.icon}
+                                        size={25}
+                                    />
+                                )}
+                            </View>
+                        ))}
                     </View>
                 </>
             ) : (
@@ -111,5 +120,10 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontWeight: "bold",
         marginHorizontal: 10,
+    },
+    weatherIcon: {
+        width: 50,
+        height: 50,
+        marginLeft: 10,
     },
 });

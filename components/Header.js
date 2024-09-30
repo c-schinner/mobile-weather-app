@@ -1,10 +1,4 @@
-import {
-    View,
-    TextInput,
-    Text,
-    TouchableOpacity,
-    StyleSheet,
-} from "react-native";
+import { View, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 import { useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 
@@ -17,6 +11,7 @@ export default function Header({ setSearchParams }) {
                 ...prevParams,
                 q: input,
             }));
+            setInput("");
         }
     };
 
@@ -25,6 +20,7 @@ export default function Header({ setSearchParams }) {
             <View style={styles.inputContainer}>
                 <TextInput
                     style={styles.input}
+                    value={input}
                     placeholderTextColor={"black"}
                     placeholder="Enter a location"
                     onChangeText={setInput}
