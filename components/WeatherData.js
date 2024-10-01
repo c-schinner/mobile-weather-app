@@ -77,9 +77,7 @@ export default function WeatherData({ searchParams }) {
                         ))}
                     </View>
                 </>
-            ) : (
-                <Text>Loading...</Text>
-            )}
+            ) : null}
         </View>
     );
 }

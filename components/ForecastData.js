@@ -24,31 +24,31 @@ export default function ForecastData({ searchParams }) {
 
     return (
         <View style={styles.container}>
-            <View style={styles.headerInfo}>
-                <Text style={styles.headerText}> 5 Day Forecast</Text>
-            </View>
+            {forecast ? (
+                <View style={styles.headerInfo}>
+                    <Text style={styles.headerText}> 5 Day Forecast</Text>
+                </View>
+            ) : null}
             <ScrollView
                 showsHorizontalScrollIndicator={false}
                 horizontal={true}
                 contentContainerStyle={styles.forecastContainer}
             >
-                {forecast ? (
-                    forecast.map((day, index) => (
-                        <View key={index} style={styles.dataInfo}>
-                            <Text style={styles.dataText}>
-                                {new Date(day.dt * 1000).toLocaleDateString(
-                                    "en-US",
-                                    { weekday: "short" }
-                                )}
-                            </Text>
-                            <Text style={styles.dataText}>
-                                Temp: {Math.round(day.main.temp)} °F
-                            </Text>
-                        </View>
-                    ))
-                ) : (
-                    <Text>Loading...</Text>
-                )}
+                {forecast
+                    ? forecast.map((day, index) => (
+                          <View key={index} style={styles.dataInfo}>
+                              <Text style={styles.dataText}>
+                                  {new Date(day.dt * 1000).toLocaleDateString(
+                                      "en-US",
+                                      { weekday: "short" }
+                                  )}
+                              </Text>
+                              <Text style={styles.dataText}>
+                                  Temp: {Math.round(day.main.temp)} °F
+                              </Text>
+                          </View>
+                      ))
+                    : null}
             </ScrollView>
         </View>
     );
