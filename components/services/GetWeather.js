@@ -8,9 +8,6 @@ export const iconUrlFromCode = (icon) =>
 export const fetchWeatherData = async (infoType, searchParams) => {
     const url = new URL(BASE_URL + infoType);
 
-    console.log("Using API Key:", WEATHER_API_KEY);
-    console.log("Search PArams:", searchParams);
-
     url.searchParams.append("units", searchParams.units);
     url.searchParams.append("q", searchParams.q);
     url.searchParams.append("appid", WEATHER_API_KEY);
@@ -19,4 +16,25 @@ export const fetchWeatherData = async (infoType, searchParams) => {
 
     const res = await fetch(url);
     return await res.json();
+};
+
+export const fetchForecastWeatherData = async (type, searchParams) => {
+    const url = new URL(BASE_URL + type);
+
+    url.searchParams.append("units", "imperial");
+    url.searchParams.append("q", searchParams.q);
+    url.searchParams.append("appid", WEATHER_API_KEY);
+
+    console.log("Forecast Request URL:", url.toString());
+
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Error fetching data: ${response.statusText}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("Failed to fetch forecast data:", error);
+        return null;
+    }
 };
