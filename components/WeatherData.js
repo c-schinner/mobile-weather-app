@@ -60,7 +60,10 @@ export default function WeatherData({ searchParams }) {
                         {weatherInfoMap.map((info, index) => (
                             <View key={index} style={styles.weatherData}>
                                 <Text style={styles.weatherInfo}>
-                                    {info.label}: {info.value}
+                                    {info.label}:
+                                </Text>
+                                <Text style={styles.weatherValue}>
+                                    {info.value}
                                 </Text>
                                 {info.isImage ? (
                                     <Image
@@ -71,6 +74,7 @@ export default function WeatherData({ searchParams }) {
                                     <MaterialCommunityIcons
                                         name={info.icon}
                                         size={25}
+                                        style={styles.icon}
                                     />
                                 )}
                             </View>
@@ -94,18 +98,34 @@ const styles = StyleSheet.create({
     weatherData: {
         flexDirection: "row",
         alignItems: "center",
+        marginBottom: 10,
+    },
+    weatherInfo: {
+        fontSize: 17,
+        fontWeight: "bold",
+        marginRight: 10,
+    },
+    weatherValue: {
+        fontSize: 15,
+        fontWeight: "bold",
+        marginRight: 10,
+    },
+    weatherIcon: {
+        width: 50,
+        height: 50,
+        marginLeft: 10,
+    },
+    icon: {
+        marginLeft: 10,
     },
     locationContainer: {
         padding: 20,
-        margin: 20,
+        margin: 10,
     },
     locationText: {
-        paddingVertical: 1,
-        paddingHorizontal: 10,
         textAlign: "center",
         fontSize: 20,
         fontWeight: "bold",
-        alignSelf: "center",
     },
     locationTextContainer: {
         padding: 20,
@@ -113,15 +133,5 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         borderWidth: 2,
         borderColor: "black",
-    },
-    weatherInfo: {
-        fontSize: 15,
-        fontWeight: "bold",
-        marginHorizontal: 10,
-    },
-    weatherIcon: {
-        width: 50,
-        height: 50,
-        marginLeft: 10,
     },
 });
