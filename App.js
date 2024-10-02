@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
         height: "100%",
     },
     weatherContainer: {
-        marginTop: 50,
+        marginTop: 5,
     },
     forecastContainer: {
         marginTop: 50,
