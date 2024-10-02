@@ -20,7 +20,6 @@ export default function ForecastData({ searchParams }) {
                     "forecast",
                     searchParams
                 );
-                console.log("Forecast Data:", data);
 
                 if (data && data.list) {
                     const dailyForecasts = data.list.filter(
@@ -44,7 +43,7 @@ export default function ForecastData({ searchParams }) {
             ) : (
                 <>
                     <View style={styles.headerInfo}>
-                        <Text style={styles.headerText}> 5 Day Forecast</Text>
+                        <Text style={styles.headerText}>5 Day Forecast</Text>
                     </View>
 
                     <ScrollView

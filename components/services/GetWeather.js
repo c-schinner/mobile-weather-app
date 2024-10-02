@@ -18,6 +18,31 @@ export const fetchWeatherData = async (infoType, searchParams) => {
     return await res.json();
 };
 
+const processForecastData = (forecastData) => {
+    const { list } = forecastData;
+
+    const dailyForecast = list
+        .filter((item) => item.dt_txt.includes("12:00:00"))
+        .slice(0, 5);
+
+    const fiveDayForecast = dailyForecast.map((item) => {
+        const {
+            dt_txt,
+            main: { temp },
+            weather,
+        } = item;
+        const description = weather[0].description;
+
+        return {
+            date: dt_txt,
+            temp,
+            description,
+        };
+    });
+
+    return fiveDayForecast;
+};
+
 export const fetchForecastWeatherData = async (type, searchParams) => {
     const url = new URL(BASE_URL + type);
 
@@ -32,7 +57,9 @@ export const fetchForecastWeatherData = async (type, searchParams) => {
         if (!response.ok) {
             throw new Error(`Error fetching data: ${response.statusText}`);
         }
-        return await response.json();
+
+        const data = await response.json();
+        return processForecastData(data);
     } catch (error) {
         console.error("Failed to fetch forecast data:", error);
         return null;
