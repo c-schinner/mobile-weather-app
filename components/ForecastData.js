@@ -46,7 +46,7 @@ export default function ForecastData({ searchParams }) {
                                 )}
                             </Text>
                             <Text style={styles.dataText}>
-                                Temp: {Math.round(day.temp)} °F
+                                {Math.round(day.temp)} °F
                             </Text>
                             <Text style={styles.dataText}>
                                 {day.description}

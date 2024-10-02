@@ -55,6 +55,6 @@ const styles = StyleSheet.create({
         marginTop: 50,
     },
     forecastContainer: {
-        marginTop: 100,
+        marginTop: 50,
     },
 });
