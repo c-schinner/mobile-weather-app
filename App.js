@@ -12,12 +12,6 @@ import WeatherData from "./components/WeatherData.js";
 import ForecastData from "./components/ForecastData.js";
 import { useState } from "react";
 
-// Weather dats is working correctly, adjust icons and import the icons from the weather app (in getWeather)
-// forecast is not loading yet... figure out what is going on with that
-// Get the different background images to load with each type of weather (images are in assets)
-// get rid of borders and tune up the UI to make it look better
-// maybe use a different background image for the initial load
-
 export default function App() {
     const [searchParams, setSearchParams] = useState({
         q: "",

@@ -4,6 +4,7 @@ import { fetchForecastWeatherData } from "./services/GetWeather";
 
 export default function ForecastData({ searchParams }) {
     const [forecast, setForecast] = useState([]);
+    const [hasSearched, setHasSearched] = useState(false);
 
     useEffect(() => {
         const fetchForecast = async () => {
@@ -16,6 +17,9 @@ export default function ForecastData({ searchParams }) {
 
                 if (data) {
                     setForecast(data);
+                    setHasSearched(true);
+                } else {
+                    setHasSearched(false);
                 }
             }
         };
@@ -25,38 +29,42 @@ export default function ForecastData({ searchParams }) {
 
     return (
         <View style={styles.container}>
-            <View style={styles.headerInfo}>
-                <Text style={styles.headerText}>5 Day Forecast</Text>
-            </View>
+            {hasSearched && (
+                <>
+                    <View style={styles.headerInfo}>
+                        <Text style={styles.headerText}>5 Day Forecast</Text>
+                    </View>
 
-            <ScrollView
-                showsHorizontalScrollIndicator={false}
-                horizontal={true}
-                contentContainerStyle={styles.forecastContainer}
-            >
-                {forecast.length > 0 ? (
-                    forecast.map((day, index) => (
-                        <View key={index} style={styles.dataInfo}>
-                            <Text style={styles.dataText}>
-                                {new Date(day.date).toLocaleDateString(
-                                    "en-US",
-                                    {
-                                        weekday: "short",
-                                    }
-                                )}
-                            </Text>
-                            <Text style={styles.dataText}>
-                                {Math.round(day.temp)} °F
-                            </Text>
-                            <Text style={styles.dataText}>
-                                {day.description}
-                            </Text>
-                        </View>
-                    ))
-                ) : (
-                    <Text>No forecast data available</Text>
-                )}
-            </ScrollView>
+                    <ScrollView
+                        showsHorizontalScrollIndicator={false}
+                        horizontal={true}
+                        contentContainerStyle={styles.forecastContainer}
+                    >
+                        {forecast.length > 0 ? (
+                            forecast.map((day, index) => (
+                                <View key={index} style={styles.dataInfo}>
+                                    <Text style={styles.dataText}>
+                                        {new Date(day.date).toLocaleDateString(
+                                            "en-US",
+                                            {
+                                                weekday: "short",
+                                            }
+                                        )}
+                                    </Text>
+                                    <Text style={styles.dataText}>
+                                        {Math.round(day.temp)} °F
+                                    </Text>
+                                    <Text style={styles.dataText}>
+                                        {day.description}
+                                    </Text>
+                                </View>
+                            ))
+                        ) : (
+                            <Text>No forecast data available</Text>
+                        )}
+                    </ScrollView>
+                </>
+            )}
         </View>
     );
 }
