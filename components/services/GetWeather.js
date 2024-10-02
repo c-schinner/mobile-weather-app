@@ -27,6 +27,7 @@ export const processForecastData = (forecastData) => {
             date: item.dt_txt,
             temp: item.main.temp,
             description: item.weather[0].description,
+            icon: item.weather[0].icon,
         }));
 
     return dailyForecast;

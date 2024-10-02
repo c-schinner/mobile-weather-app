@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Image } from "react-native";
 import React, { useState, useEffect } from "react";
 import { fetchForecastWeatherData } from "./services/GetWeather";
 
@@ -57,6 +57,12 @@ export default function ForecastData({ searchParams }) {
                                     <Text style={styles.dataText}>
                                         {day.description}
                                     </Text>
+                                    <Image
+                                        source={{
+                                            uri: `http://openweathermap.org/img/wn/${day.icon}@2x.png`,
+                                        }}
+                                        style={styles.icon}
+                                    />
                                 </View>
                             ))
                         ) : (
@@ -71,6 +77,10 @@ export default function ForecastData({ searchParams }) {
 const styles = StyleSheet.create({
     container: {
         margin: 10,
+    },
+    icon: {
+        width: 50,
+        height: 50,
     },
     headerInfo: {
         marginBottom: 10,
@@ -90,7 +100,7 @@ const styles = StyleSheet.create({
     },
     dataInfo: {
         width: 100,
-        height: 100,
+        height: 150,
         padding: 10,
         backgroundColor: "rgba(255, 255, 255, 0.5)",
         borderRadius: 10,
