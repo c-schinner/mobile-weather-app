@@ -18,29 +18,18 @@ export const fetchWeatherData = async (infoType, searchParams) => {
     return await res.json();
 };
 
-const processForecastData = (forecastData) => {
+export const processForecastData = (forecastData) => {
     const { list } = forecastData;
 
     const dailyForecast = list
         .filter((item) => item.dt_txt.includes("12:00:00"))
-        .slice(0, 5);
+        .map((item) => ({
+            date: item.dt_txt,
+            temp: item.main.temp,
+            description: item.weather[0].description,
+        }));
 
-    const fiveDayForecast = dailyForecast.map((item) => {
-        const {
-            dt_txt,
-            main: { temp },
-            weather,
-        } = item;
-        const description = weather[0].description;
-
-        return {
-            date: dt_txt,
-            temp,
-            description,
-        };
-    });
-
-    return fiveDayForecast;
+    return dailyForecast;
 };
 
 export const fetchForecastWeatherData = async (type, searchParams) => {

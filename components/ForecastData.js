@@ -1,32 +1,31 @@
-import {
-    View,
-    Text,
-    StyleSheet,
-    ScrollView,
-    ActivityIndicator,
-} from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import React, { useState, useEffect } from "react";
-import { fetchForecastWeatherData } from "./services/GetWeather";
+import {
+    fetchForecastWeatherData,
+    processForecastData,
+} from "./services/GetWeather";
 
 export default function ForecastData({ searchParams }) {
     const [forecast, setForecast] = useState([]);
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchForecast = async () => {
-            setLoading(true);
             if (searchParams.q) {
-                const data = await fetchForecastWeatherData(
-                    "forecast",
-                    searchParams
-                );
-                console.log("Processed Forecast Data:", data);
+                try {
+                    const data = await fetchForecastWeatherData(
+                        "forecast",
+                        searchParams
+                    );
+                    console.log("Processed Forecast Data:", data);
 
-                if (data) {
-                    setForecast(dailyForecasts);
+                    if (data) {
+                        const processedData = processForecastData(data);
+                        setForecast(processedData);
+                    }
+                } catch (error) {
+                    console.log("Error fetching forecast data:", error);
                 }
             }
-            setLoading(false);
         };
 
         fetchForecast();
@@ -34,9 +33,7 @@ export default function ForecastData({ searchParams }) {
 
     return (
         <View style={styles.container}>
-            {loading ? (
-                <ActivityIndicator size="large" color="#0000ff" />
-            ) : (
+            {forecast.length > 0 ? (
                 <>
                     <View style={styles.headerInfo}>
                         <Text style={styles.headerText}>5 Day Forecast</Text>
@@ -47,27 +44,28 @@ export default function ForecastData({ searchParams }) {
                         horizontal={true}
                         contentContainerStyle={styles.forecastContainer}
                     >
-                        {forecast.length > 0
-                            ? forecast.map((day, index) => (
-                                  <View key={index} style={styles.dataInfo}>
-                                      <Text style={styles.dataText}>
-                                          {new Date(
-                                              day.dt * 1000
-                                          ).toLocaleDateString("en-US", {
-                                              weekday: "short",
-                                          })}
-                                      </Text>
-                                      <Text style={styles.dataText}>
-                                          Temp: {Math.round(day.main.temp)} °F
-                                      </Text>
-                                      <Text style={styles.dataText}>
-                                          {day.weather[0].description}
-                                      </Text>
-                                  </View>
-                              ))
-                            : null}
+                        {forecast.map((day, index) => (
+                            <View key={index} style={styles.dataInfo}>
+                                <Text style={styles.dataText}>
+                                    {new Date(day.date).toLocaleDateString(
+                                        "en-US",
+                                        {
+                                            weekday: "short",
+                                        }
+                                    )}
+                                </Text>
+                                <Text style={styles.dataText}>
+                                    Temp: {Math.round(day.temp)} °F
+                                </Text>
+                                <Text style={styles.dataText}>
+                                    {day.description}
+                                </Text>
+                            </View>
+                        ))}
                     </ScrollView>
                 </>
+            ) : (
+                <Text style={styles.errorText}></Text>
             )}
         </View>
     );
