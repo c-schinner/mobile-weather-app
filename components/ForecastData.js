@@ -20,13 +20,9 @@ export default function ForecastData({ searchParams }) {
                     "forecast",
                     searchParams
                 );
+                console.log("Processed Forecast Data:", data);
 
-                if (data && data.list) {
-                    const dailyForecasts = data.list.filter(
-                        (forecastItem) =>
-                            new Date(forecastItem.dt * 1000).getHours() === 12
-                    );
-
+                if (data) {
                     setForecast(dailyForecasts);
                 }
             }
