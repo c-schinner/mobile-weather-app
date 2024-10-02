@@ -1,9 +1,6 @@
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import React, { useState, useEffect } from "react";
-import {
-    fetchForecastWeatherData,
-    processForecastData,
-} from "./services/GetWeather";
+import { fetchForecastWeatherData } from "./services/GetWeather";
 
 export default function ForecastData({ searchParams }) {
     const [forecast, setForecast] = useState([]);
@@ -11,19 +8,14 @@ export default function ForecastData({ searchParams }) {
     useEffect(() => {
         const fetchForecast = async () => {
             if (searchParams.q) {
-                try {
-                    const data = await fetchForecastWeatherData(
-                        "forecast",
-                        searchParams
-                    );
-                    console.log("Processed Forecast Data:", data);
+                const data = await fetchForecastWeatherData(
+                    "forecast",
+                    searchParams
+                );
+                console.log("Processed Forecast Data:", data);
 
-                    if (data) {
-                        const processedData = processForecastData(data);
-                        setForecast(processedData);
-                    }
-                } catch (error) {
-                    console.log("Error fetching forecast data:", error);
+                if (data) {
+                    setForecast(data);
                 }
             }
         };
@@ -33,44 +25,41 @@ export default function ForecastData({ searchParams }) {
 
     return (
         <View style={styles.container}>
-            {forecast.length > 0 ? (
-                <>
-                    <View style={styles.headerInfo}>
-                        <Text style={styles.headerText}>5 Day Forecast</Text>
-                    </View>
+            <View style={styles.headerInfo}>
+                <Text style={styles.headerText}>5 Day Forecast</Text>
+            </View>
 
-                    <ScrollView
-                        showsHorizontalScrollIndicator={false}
-                        horizontal={true}
-                        contentContainerStyle={styles.forecastContainer}
-                    >
-                        {forecast.map((day, index) => (
-                            <View key={index} style={styles.dataInfo}>
-                                <Text style={styles.dataText}>
-                                    {new Date(day.date).toLocaleDateString(
-                                        "en-US",
-                                        {
-                                            weekday: "short",
-                                        }
-                                    )}
-                                </Text>
-                                <Text style={styles.dataText}>
-                                    Temp: {Math.round(day.temp)} °F
-                                </Text>
-                                <Text style={styles.dataText}>
-                                    {day.description}
-                                </Text>
-                            </View>
-                        ))}
-                    </ScrollView>
-                </>
-            ) : (
-                <Text style={styles.errorText}></Text>
-            )}
+            <ScrollView
+                showsHorizontalScrollIndicator={false}
+                horizontal={true}
+                contentContainerStyle={styles.forecastContainer}
+            >
+                {forecast.length > 0 ? (
+                    forecast.map((day, index) => (
+                        <View key={index} style={styles.dataInfo}>
+                            <Text style={styles.dataText}>
+                                {new Date(day.date).toLocaleDateString(
+                                    "en-US",
+                                    {
+                                        weekday: "short",
+                                    }
+                                )}
+                            </Text>
+                            <Text style={styles.dataText}>
+                                Temp: {Math.round(day.temp)} °F
+                            </Text>
+                            <Text style={styles.dataText}>
+                                {day.description}
+                            </Text>
+                        </View>
+                    ))
+                ) : (
+                    <Text>No forecast data available</Text>
+                )}
+            </ScrollView>
         </View>
     );
 }
-
 const styles = StyleSheet.create({
     container: {
         margin: 10,
