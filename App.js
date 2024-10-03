@@ -7,7 +7,7 @@ import {
     ImageBackground,
 } from "react-native";
 import Header from "./components/Header.js";
-import coverImage from "./assets/globe.jpg";
+import coverImage from "./assets/sunnyday2.jpeg";
 import WeatherData from "./components/WeatherData.js";
 import ForecastData from "./components/ForecastData.js";
 import { useState } from "react";
@@ -19,7 +19,11 @@ export default function App() {
     });
 
     return (
-        <ImageBackground source={coverImage} style={styles.backgroundImage}>
+        <ImageBackground
+            source={coverImage}
+            style={styles.backgroundImage}
+            resizeMode="cover"
+        >
             <SafeAreaView style={styles.container}>
                 <Header setSearchParams={setSearchParams} />
                 <View style={styles.weatherContainer}>
@@ -41,7 +45,7 @@ const styles = StyleSheet.create({
     },
     backgroundImage: {
         flex: 1,
-        resizeMode: "cover",
+        position: "absolute",
         width: "100%",
         height: "100%",
     },
